@@ -1,0 +1,26 @@
+Python Jupyter example
+
+/Users/dave/.virtualenvs/my-new-project/bin/python
+
+Copy/paste this URL into your browser when you connect for the first time,
+to login with a token:
+    http://127.0.0.1:8888/?token=dd2d1464b5430960d9eaf915b71abea338749a1a08768889
+    http://127.0.0.1:8888/?token=2c4c3e83c8da14dc4ec9e13e69e6e86a1bafd7d231256d9e
+
+Intro to DS in Python local jupyter notebooks
+    http://127.0.0.1:8888/?token=1d59ed5beb6e75e715d17b52df17b689de09802fd6627db4
+    http://127.0.0.1:8888/?token=4011c22f219ec45593c4668c0024e2a24aa74aa0b2713513
+	http://127.0.0.1:8888/?token=5fd7b0f0775f9b1d7742ec67136845c4698190a9189aa0ac
+
+https://www.coursera.org/learn/machine-learning/discussions/forums/FsTdcb2TEeS_cyIACw-CIA?page=1&sort=lastActivityAtDesc
+https://www.coursera.org/learn/python-data-analysis/resources/XMrk3
+https://www.coursera.org/learn/python-data-analysis/discussions/forums/
+https://www.coursera.org/learn/python-data-analysis/home/week/2
+	http://www.census.gov/popest/data/counties/totals/2015/files/CO-EST2015-alldata.pdf
+
+Weekly notebook:
+https://hub.coursera-notebooks.org/user/euzckasfmrcvmxkgrbmggc/notebooks/Week%201.ipynb
+https://hub.coursera-notebooks.org/user/euzckasfmrcvmxkgrbmggc/notebooks/Week%202.ipynb
+
+cdf.sort_values(by=["STNAME", "CENSUS2010POP"], inplace=True, ascending=False)
+cdf2 = cdf.set_index(["STNAME", "CTYNAME"])

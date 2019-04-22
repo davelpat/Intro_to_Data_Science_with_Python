@@ -1,0 +1,164 @@
+ndarray?
+numpy.ndarray?
+np.ndarray?
+import pandas as pd
+
+purchase_1 = pd.Series({'Name': 'Chris',
+                        'Item Purchased': 'Dog Food',
+                        'Cost': 22.50})
+purchase_2 = pd.Series({'Name': 'Kevyn',
+                        'Item Purchased': 'Kitty Litter',
+                        'Cost': 2.50})
+purchase_3 = pd.Series({'Name': 'Vinod',
+                        'Item Purchased': 'Bird Seed',
+                        'Cost': 5.00})
+
+df = pd.DataFrame([purchase_1, purchase_2, purchase_3], index=['Store 1', 'Store 1', 'Store 2'])
+
+df['Cost'] > 3.0
+df['Name']
+df.loc[df['Cost'] > 3.0, ['Name']]
+
+df["Location"] = df.index
+df = df.set_index(['Location', 'Name'])
+df.loc[('Store 2', 'Kevyn'), ['Item Purchased', 'Cost']] = ['Kitty Food', 3.00]
+
+###
+odf = pd.read_csv('olympics.csv', index_col = 0, skiprows=1)
+odf.columns
+for col in odf.columns:
+    if col[:2]=='01':
+        odf.rename(columns={col:'Gold' + col[4:]}, inplace=True)
+    if col[:2]=='02':
+        odf.rename(columns={col:'Silver' + col[4:]}, inplace=True)
+    if col[:2]=='03':
+        odf.rename(columns={col:'Bronze' + col[4:]}, inplace=True)
+    if col[:1]=='№':
+        odf.rename(columns={col:'#' + col[1:]}, inplace=True) 
+odf['Gold'] > 0
+odf['Gold'].count()
+odf.max["Gold"]
+len(odf[(odf['Gold'] > 0) | (odf['Gold.1'] > 0)])
+odf[(odf['Gold.1'] > 0) & (odf['Gold'] == 0)]
+odf["Gold"].argmax()
+# odf["Gold"].idmax()  # not yet
+
+dif = abs(odf["Gold"] - odf["Gold.1"]).max()
+len(dif)
+dif.head()
+type(dif)
+dif
+odf["United States"]
+odf.loc["United States"]
+
+odf = pd.read_csv('olympics.csv', index_col=0, skiprows=1)
+
+for col in odf.columns:
+    if col[:2]=='01':
+        odf.rename(columns={col:'Gold'+col[4:]}, inplace=True)
+    if col[:2]=='02':
+        odf.rename(columns={col:'Silver'+col[4:]}, inplace=True)
+    if col[:2]=='03':
+        odf.rename(columns={col:'Bronze'+col[4:]}, inplace=True)
+    if col[:1]=='№':
+        odf.rename(columns={col:'#'+col[1:]}, inplace=True)
+
+names_ids = odf.index.str.split('\s\(') # split the index by ' ('
+
+odf.index = names_ids.str[0] # the [0] element is the country name (new index) 
+odf['ID'] = names_ids.str[1].str[:3] # the [1] element is the abbreviation or ID (take first 3 characters from that)
+
+odf = odf.drop('Totals')
+print(odf.head())
+odf["Gold diff"] = (odf["Gold"] - odf["Gold.1"]).abs()
+odf["Gold diff"].argmax()
+odf[(odf['Gold.1'] > 0) & (odf['Gold'] > 0)].head()
+odf.loc["Belarus"]
+[(odf['Gold.1'] > 0) & (odf['Gold'] > 0)].head()
+odf.mask((odf['Gold.1'] > 0) & (odf['Gold'] > 0)).head()
+odf.mask(((odf['Gold.1'] > 0) & (odf['Gold'] > 0))).head()
+len(odf.mask(((odf['Gold.1'] > 0) & (odf['Gold'] > 0))))
+len(odf)
+odf["United States"].mask((odf['Gold.1'] > 0) & (odf['Gold'] > 0)).head()
+odf.loc["United States"].mask((odf['Gold.1'] > 0) & (odf['Gold'] > 0)).head()
+odf.loc["United States"].mask(!((odf['Gold.1'] > 0) & (odf['Gold'] > 0))).head()
+odf.loc["United States"].mask(not((odf['Gold.1'] > 0) & (odf['Gold'] > 0))).head()
+len(odf[((odf['Gold.1'] > 0) & (odf['Gold'] > 0))])
+both_gold_df = odf[((odf['Gold.1'] > 0) & (odf['Gold'] > 0))]
+len(both_gold_df)
+bgdf = both_gold_df
+bgdf["Summer Gold Ratio"] = ((bgdf["Gold"] - bgdf["Gold.1"]) / bgdf["Gold.2"])
+((bgdf["Gold"] - bgdf["Gold.1"]) / bgdf["Gold.2"]).argmax()
+bgdf["Bulgaria"]
+odf["Bulgaria"]
+odf.loc["Bulgaria"]
+odf.index
+odf.names
+list(odf.columns.values)
+odf["Points"] = odf["Gold.2"] * 3 + odf["Silver.2"] * 2 + odf["Bronze.2"]
+odf{"Points"}.head()
+odf["Points"].head()
+type(odf["Points"])
+len(odf["Points"])
+
+###
+import pandas as pd
+import numpy as np
+census_df = pd.read_csv('census.csv')
+census_df.head()
+census_df.index
+cdf = census_df
+
+# State with the most counties
+cdf.loc[(cdf["SUMLEV"] == 40), "STNAME"].count()
+cdf.loc[(cdf["SUMLEV"] == 40), "STNAME"].value_counts()
+cdf.loc[(cdf["SUMLEV"] == 50), "STNAME"].value_counts()
+cdf.loc[(cdf["SUMLEV"] == 50), "STNAME"].value_counts().argmax()
+census_df.loc[(census_df["SUMLEV"] == 50), "STNAME"].value_counts().argmax()
+
+# Only looking at the 3 most populous counties, find the 3 most populous states
+cdf = census_df.loc[(census_df["SUMLEV"] == 50), ["STNAME", "CTYNAME", "CENSUS2010POP"]]
+cdf.loc[(cdf["SUMLEV"] == 50), ["STNAME", "CENSUS2010POP"]].nlargest(3, "CENSUS2010POP")
+
+cdfs = cdf.loc[(cdf["SUMLEV"] == 50), ["STNAME", "CENSUS2010POP"]].sort_values(by=["STNAME", "CENSUS2010POP"], ascending=False)
+cdfs.tail()
+
+# cdf2 = cdf.set_index(["STNAME", "CTYNAME"])
+cdfs2 = cdfs.set_index("STNAME")
+
+# idx = pd.IndexSlice
+# cdf2.loc[idx[:,[0,1,2]],:]
+# cdf2.loc[idx[:,[:3]],:]
+# census_df.loc[(census_df["SUMLEV"] == 50), ("STNAME", "CENSUS2010POP")].nlargest(3, ("STNAME", "CENSUS2010POP")).head()
+# census_df.loc[(census_df["SUMLEV"] == 50), ("STNAME", "CENSUS2010POP")].nlargest(3, "CENSUS2010POP").head()
+# cdf = census_df.loc[(census_df["SUMLEV"] == 50), ["STNAME", "CTYNAME", "CENSUS2010POP"]]
+# cdf.sort_values(by=["STNAME", "CENSUS2010POP"], inplace=True, ascending=False)
+# cdf.nlargest(3, "CENSUS2010POP")
+
+type(cdfs.groupby(by="STNAME"))
+cdfs.groupby(by="STNAME").head(3)
+cdf3 = cdfs.groupby(by="STNAME").head(3)
+cdf3.groupby("STNAME").sum().nlargest(3, "CENSUS2010POP")
+
+## Answer 6
+# extract just the state and county populations, then sort by population
+cdfs = census_df.loc[(census_df["SUMLEV"] == 50), ["STNAME", "CENSUS2010POP"]].sort_values(by=["STNAME", "CENSUS2010POP"], ascending=False)
+cdfs.set_index("STNAME", inplace=True)
+# take the 3 largest counties of each state, sum them by state, then return the 3 largest populations
+cdf3 = cdfs.groupby(by="STNAME").head(3).groupby("STNAME").sum().nlargest(3, "CENSUS2010POP")
+# return a list of those states
+list(cdf3.index)
+
+# which county had the greatest population change
+cdf = census_df.loc[(census_df["SUMLEV"] == 50), ["CTYNAME", 'POPESTIMATE2010', 'POPESTIMATE2011', 'POPESTIMATE2012', 'POPESTIMATE2013', 'POPESTIMATE2014', 'POPESTIMATE2015']]
+cdf.set_index('CTYNAME', inplace=True)
+cdf["Diff"] = abs(cdf.values.max(axis=1) - cdf.values.min(axis=1))
+cdf["Diff"].argmax()
+
+"""
+Create a query that finds the counties that belong to regions 1 or 2, whose name starts with 'Washington', and whose POPESTIMATE2015 was greater than their POPESTIMATE 2014.
+
+This function should return a 5x2 DataFrame with the columns = ['STNAME', 'CTYNAME'] and the same index ID as the census_df (sorted ascending by index).
+"""
+cdf = census_df.loc[(census_df["SUMLEV"] == 50) & ((census_df['REGION'] == 1) | (census_df['REGION'] == 2)), ["STNAME", "CTYNAME", 'POPESTIMATE2014', 'POPESTIMATE2015']]
+cdf2 = cdf.loc[(cdf['CTYNAME'].str.contains('Washington*')) & (cdf['POPESTIMATE2015'] > cdf['POPESTIMATE2014']), ['STNAME', 'CTYNAME']]
